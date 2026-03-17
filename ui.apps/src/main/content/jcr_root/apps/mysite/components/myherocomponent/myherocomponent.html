@@ -1,0 +1,29 @@
+<sly data-sly-use.modelhero="com.mysite.aem.core.models.MyHeroComponentModel">
+    
+    <div data-sly-test="${wcmmode.edit && !modelhero.configured}" 
+         class="cq-placeholder" 
+         data-emptytext="My Hero Component - Click to Configure"></div>
+
+    <div class="myhero-container" data-sly-test="${modelhero.configured}">
+        <div class="myhero-content">
+            <h1 class="myhero-title">
+                ${modelhero.text}
+            </h1>
+        </div>
+
+        <div class="myhero-media">
+            <sly data-sly-test="${modelhero.mediaType == 'image' && modelhero.imagePath}">
+                <img src="${modelhero.imagePath}" alt="${modelhero.text}" class="myhero-asset" />
+            </sly>
+
+            <sly data-sly-test="${modelhero.mediaType == 'video' && modelhero.videoPath}">
+                <video controls width="100%" class="myhero-asset">
+                    <source src="${modelhero.videoPath}" type="video/mp4"/>
+                </video>
+            </sly>
+        </div>
+    </div>
+
+    <sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+         data-sly-call="${clientlib.all @ categories='mystyle.site'}"/>
+</sly>
