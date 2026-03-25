@@ -1,0 +1,22 @@
+/* Target the container you just named */
+.header-flex-container {
+    display: flex; /* This puts items in a row by default */
+    justify-content: space-between; /* Pushes first item to left, last item to right */
+    align-items: center; /* Vertically centers the nav and search bar */
+    width: 100%;
+    padding: 10px 20px; /* Optional: adds some breathing room */
+    box-sizing: border-box;
+    border: 2px solid #333333; /* Thickness, Style, and Color */
+    border-radius: 4px;        /* Optional: rounds the corners slightly */
+    background-color: #ffffff;
+}
+
+/* Optional: Ensure the Navigation takes up only the space it needs */
+.header-flex-container .navigation {
+    flex: 0 1 auto;
+}
+
+/* Optional: Ensure the Search bar stays on the right */
+.header-flex-container .search {
+    flex: 0 1 auto;
+}

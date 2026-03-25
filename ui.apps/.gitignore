@@ -1,2 +1,28 @@
-src/main/content/jcr_root/apps/mysite/clientlibs/clientlib-site
-src/main/content/jcr_root/apps/mysite/clientlibs/clientlib-dependencies
+
+# --- Maven / Build Defaults ---
+target/
+pom.xml.releaseBackup
+release.properties
+*.versionsBackup
+
+# --- AEM / JCR Specifics ---
+# This ignores the temporary folders created during a build
+*.content.xml.dir/
+.vlt
+.vlt-sync.log
+# Ignores local vault packages that shouldn't be in Git
+*.zip
+*.jar
+
+# --- IDE Specifics ---
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+.DS_Store
+
+# --- Node/Frontend (if using ui.frontend) ---
+node_modules/
+dist/
