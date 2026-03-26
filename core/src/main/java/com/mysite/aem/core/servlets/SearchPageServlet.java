@@ -32,6 +32,9 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 /**
  * Servlet that writes some sample content into the response. It is mounted for
  * all resources of a specific Sling resource type. The
@@ -51,23 +54,43 @@ public class SearchPageServlet extends SlingSafeMethodsServlet {
     @Override
     protected void doGet(final SlingHttpServletRequest req,
             final SlingHttpServletResponse resp) throws ServletException, IOException {
-    	
-    	ResourceResolver resolver = req.getResourceResolver();
-    	
-    	String searchPath = req.getParameter("path");
-    	
-    	if (searchPath!=null) {
-    		Resource targetResource = resolver.getResource(searchPath);
-    		
-    		resp.setContentType("text/plain");
-    		if(targetResource != null) {
-    			resp.getWriter().write("Resourcefound!"+targetResource.getResourceType());
-    		}else {
-    			resp.getWriter().write("Path does not exist in AEM.");
-    		}
-    	}
-    	
-    	
+        
+        ResourceResolver resolver = req.getResourceResolver();
+        String searchPath = req.getParameter("path");
+        
+        // 1. Set Content Type
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
 
+        // 2. Initialize GSON and a JsonObject
+        Gson gson = new Gson();
+        JsonObject responseJson = new JsonObject();
+
+        if (searchPath != null) {
+            Resource targetResource = resolver.getResource(searchPath);
+            
+            if (targetResource != null) {
+                responseJson.addProperty("status", "success");
+                responseJson.addProperty("path", searchPath);
+                responseJson.addProperty("resourceType", targetResource.getResourceType());
+                
+                Resource jcrContent = targetResource.getChild("jcr:content");
+                if (jcrContent != null) {
+                    String title = jcrContent.getValueMap().get("jcr:title", String.class);
+                    responseJson.addProperty("pageTitle", title != null ? title : "No Title");
+                } else {
+                    responseJson.addProperty("pageTitle", "N/A (No jcr:content)");
+                }
+            } else {
+                responseJson.addProperty("status", "error");
+                responseJson.addProperty("message", "Path not found: " + searchPath);
+            }
+        } else {
+            responseJson.addProperty("status", "error");
+            responseJson.addProperty("message", "Missing 'path' parameter");
+        }
+
+        // 3. Write the JSON to the response
+        resp.getWriter().write(gson.toJson(responseJson));
     }
 }
