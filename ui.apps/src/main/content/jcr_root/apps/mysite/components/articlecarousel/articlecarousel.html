@@ -1,0 +1,18 @@
+<div class="article-carousel-wrapper" 
+     data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
+    
+    <h3>${properties.jcr:title || 'Featured Articles'}</h3>
+
+<div id="article-carousel-track" 
+     class="carousel-track article-carousel-track" 
+     data-path="${properties.rootPath}">
+    <p class="loading-msg">Loading articles...</p>
+</div>
+
+    <div class="carousel-navigation">
+        <button class="prev-btn">❮</button>
+        <button class="next-btn">❯</button>
+    </div>
+
+    <sly data-sly-call="${clientlib.js @ categories='mysite.article.carousel'}"></sly>
+</div>
