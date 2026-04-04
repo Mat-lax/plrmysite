@@ -1,0 +1,18 @@
+
+    <nav class="cmp-breadcrumb"
+     aria-label="Breadcrumb"
+     data-sly-use.model="com.mysite.aem.core.models.ArticleBreadcrumbModel">
+
+    <ol class="cmp-breadcrumb__list" data-sly-list.item="${model.breadcrumbs}">
+        <li class="cmp-breadcrumb__item ${itemList.last ? 'active' : ''}">
+            <sly data-sly-test="${!itemList.last}">
+                <a href="${item.path}.html" class="cmp-breadcrumb__link">
+                    ${item.title || item.name}
+                </a>
+            </sly>
+            <sly data-sly-test="${itemList.last}">
+                <span class="cmp-breadcrumb__current">${item.title || item.name}</span>
+            </sly>
+        </li>
+    </ol>
+</nav>
