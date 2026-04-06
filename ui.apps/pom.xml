@@ -48,6 +48,8 @@
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <configuration>
+                <jcrRootSourceDirectory>${project.basedir}/src/main/content/jcr_root</jcrRootSourceDirectory>
+                <metaInfVaultDirectory>${project.basedir}/src/main/content/META-INF/vault</metaInfVaultDirectory>
                     <properties>
                         <cloudManagerTarget>none</cloudManagerTarget>
                     </properties>
