@@ -76,6 +76,7 @@
                 </configuration>
             </plugin>
 
+
             <plugin>
                 <groupId>org.apache.sling</groupId>
                 <artifactId>htl-maven-plugin</artifactId>
