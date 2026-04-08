@@ -1,0 +1,28 @@
+<div class="contact-card-container" data-sly-use.model="com.mysite.aem.core.models.ContactCardsModel">
+    <div class="contact-grid" data-sly-list.contact="${model.contacts}">
+        
+        <div class="contact-card">
+            <div class="card-image-wrapper" data-sly-test="${contact.profileimage}">
+                <img src="${contact.profileimage}" alt="${contact.name}" class="card-image"/>
+            </div>
+
+            <div class="card-details">
+                <h3 class="contact-name">${contact.name}</h3>
+                <p class="contact-title">${contact.role}</p>
+                <p class="contact-location">${contact.country}</p>
+                
+                <div class="contact-actions">
+                    <a href="mailto:${contact.gmail}" class="btn-email" title="Email ${contact.name}">
+                        <span class="icon">✉</span> Send Email
+                    </a>
+                    <a href="tel:${contact.phone}" class="btn-phone" title="Call ${contact.name}">
+                        <span class="icon">☎</span> ${contact.phone}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <div data-sly-test="${!model.contacts}" class="cq-placeholder" data-emptytext="Configure Contact Cards (Select Content Fragments)"></div>
+</div>

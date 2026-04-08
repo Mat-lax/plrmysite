@@ -1,0 +1,50 @@
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.contact-card {
+    border: 1px solid #e1e1e1;
+    background: #fff;
+    transition: transform 0.2s ease;
+}
+
+.contact-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.card-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover; /* Professional crop */
+}
+
+.card-details {
+    padding: 20px;
+}
+
+.contact-name {
+    font-size: 1.2rem;
+    color: #007b78; /* Infineon Green-ish */
+    margin: 0 0 5px 0;
+}
+
+.contact-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.contact-actions a {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.85rem;
+}
+
+.contact-actions a:hover {
+    text-decoration: underline;
+}

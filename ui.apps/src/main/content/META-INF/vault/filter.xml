@@ -3,4 +3,5 @@
     <filter root="/apps/mysite/clientlibs"/>
     <filter root="/apps/mysite/components"/>
     <filter root="/apps/mysite/i18n"/>
+    <filter root="/content/dam/mysite/clientlibs"/>
 </workspaceFilter>
