@@ -7,8 +7,8 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ChildResource;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,48 +27,43 @@ public class ContactCardsModel {
     @SlingObject
     private ResourceResolver resourceResolver;
 
-    // Use Object to prevent injection failure if the JCR stores a single string vs an array
-    @ValueMapValue(name = "contactFragmentPaths")
-    private Object contactPathsObject;
+    // Use ChildResource to inject the list of nodes created by the composite multifield
+    // The name matches the 'name' property on the container in your dialog
+    @ChildResource(name = "contactFragmentPaths")
+    private List<Resource> fragmentResources;
 
     private List<Contact> contacts = new ArrayList<>();
 
     @PostConstruct
     protected void init() {
-        String[] paths = getPathsAsArray();
-        
-        if (paths != null && resourceResolver != null) {
-            for (String path : paths) {
-                Resource fragmentResource = resourceResolver.getResource(path);
-                if (fragmentResource != null) {
-                    ContentFragment fragment = fragmentResource.adaptTo(ContentFragment.class);
-                    if (fragment != null) {
-                        contacts.add(new Contact(
-                            getElementValue(fragment, "name"),         
-                            getElementValue(fragment, "role"),         
-                            getElementValue(fragment, "profileimage"), 
-                            getElementValue(fragment, "gmail"),        
-                            getElementValue(fragment, "phone"),
-                            getElementValue(fragment, "country")
-                        ));
+        if (fragmentResources != null && resourceResolver != null) {
+            for (Resource itemNode : fragmentResources) {
+                // Get the 'fragmentPath' property from the individual child node
+                String path = itemNode.getValueMap().get("fragmentPath", String.class);
+                
+                if (path != null) {
+                    Resource fragmentResource = resourceResolver.getResource(path);
+                    if (fragmentResource != null) {
+                        ContentFragment fragment = fragmentResource.adaptTo(ContentFragment.class);
+
+                        if (fragment != null) {
+                            contacts.add(new Contact(
+                                getElementValue(fragment, "name"),         
+                                getElementValue(fragment, "role"),         
+                                getElementValue(fragment, "profileimage"), 
+                                getElementValue(fragment, "gmail"),        
+                                getElementValue(fragment, "phone"),
+                                getElementValue(fragment, "country")
+                            ));
+                        }
                     }
                 }
             }
         }
     }
 
-    /**
-     * Helper to safely convert the multifield object to a String array.
-     */
-    private String[] getPathsAsArray() {
-        if (contactPathsObject instanceof String[]) {
-            return (String[]) contactPathsObject;
-        } else if (contactPathsObject instanceof String) {
-            return new String[]{(String) contactPathsObject};
-        }
-        return null;
-    }
 
+    // Helper method to safely get element values from the content fragment
     private String getElementValue(ContentFragment fragment, String elementName) {
         return Optional.ofNullable(fragment.getElement(elementName))
                 .map(ContentElement::getContent)
@@ -78,7 +73,7 @@ public class ContactCardsModel {
     public List<Contact> getContacts() {
         return contacts;
     }
-
+// Inner class to represent a contact
     public static class Contact {
         private final String name;
         private final String role;
